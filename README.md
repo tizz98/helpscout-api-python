@@ -4,13 +4,13 @@ helpscout-api-python
 Python wrapper for the Help Scout API 
 
 ## Installation:
-`git clone git@github.com/mccannm11/helpscout-api-python`
-`cd helpscout-api-python && python setup.py install`
+- `git clone git@github.com/tizz98/helpscout-api-python`
+- `cd helpscout-api-python && python setup.py install`
 
 Example Usage: API
 ---------------------
 
-```
+```python
 import helpscout
 
 client = helpscout.Client()
@@ -19,13 +19,13 @@ client.api_key = "your-api-key-here"
 mailboxes = client.mailboxes()
 folders = client.folders(mailboxes.items[0].id)
 for f in folders:
-    #do things here
+    # do things here
 
 
-customer = client.customer(customer-id-here)
+customer = client.customer(customer_id)
 if customers.socialProfiles != None:
     for s in customers.socialProfiles:
-         #do things
+         # do things
 
 ```
 
