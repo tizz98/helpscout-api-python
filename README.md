@@ -4,7 +4,7 @@ helpscout-api-python
 Python wrapper for the Help Scout API 
 
 ## Installation:
-- `git clone git@github.com/tizz98/helpscout-api-python`
+- `git clone git@github.com:tizz98/helpscout-api-python.git`
 - `cd helpscout-api-python && python setup.py install`
 
 Example Usage: API
