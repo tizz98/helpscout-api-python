@@ -3,6 +3,7 @@ import json
 from . import models
 import inspect
 
+
 class Client(object):
     def __init__(self):
         self.base_url = "https://api.helpscout.net/v1/"
@@ -18,30 +19,39 @@ class Client(object):
         return self.page(url, "Mailbox", 200, **kwargs)
 
     def folders(self, mailbox_id, fields=None, **kwargs):
-        url = add_fields("mailboxes/{}/folders.json".format(mailbox_id), fields)
+        url = add_fields("mailboxes/{}/folders.json".format(mailbox_id),
+                         fields)
         return self.page(url, "Folder", 200, **kwargs)
 
-    def conversations_for_folder(self, mailbox_id, folder_id, fields=None, **kwargs):
-        url = "mailboxes/{}/folders/{}/converstations.json".format(mailbox_id, folder_id)
+    def conversations_for_folder(self, mailbox_id, folder_id, fields=None,
+                                 **kwargs):
+        url = "mailboxes/{}/folders/{}/converstations.json".format(mailbox_id,
+                                                                   folder_id)
         url = add_fields(url, fields)
         return self.page(url, "Conversation", 200, **kwargs)
 
     def conversations_for_mailbox(self, mailbox_id, fields=None, **kwargs):
-        url = add_fields("mailboxes/{}/conversations.json".format(mailbox_id), fields)
+        url = add_fields("mailboxes/{}/conversations.json".format(mailbox_id),
+                         fields)
         return self.page(url, "Conversation", 200, **kwargs)
 
-    def conversations_for_customer_by_mailbox(self, mailbox_id, customer_id, fields=None, **kwargs):
-        url = "mailboxes/{}/customers/{}/conversations.json".format(mailbox_id, customer_id)
+    def conversations_for_customer_by_mailbox(self, mailbox_id, customer_id,
+                                              fields=None, **kwargs):
+        url = "mailboxes/{}/customers/{}/conversations.json".format(
+            mailbox_id, customer_id)
         url = add_fields(url, fields)
         return self.page(url, "Conversation", 200, **kwargs)
 
-    def conversations_for_user_by_mailbox(self, mailbox_id, user_id, fields=None, **kwargs):
-        url = "mailboxes/{}/customers/{}/conversations.json".format(mailbox_id, user_id)
+    def conversations_for_user_by_mailbox(self, mailbox_id, user_id,
+                                          fields=None, **kwargs):
+        url = "mailboxes/{}/customers/{}/conversations.json".format(
+            mailbox_id, user_id)
         url = add_fields(url, fields)
         return self.page(url, "Conversation", 200, **kwargs)
 
     def conversation(self, conversation_id, fields=None):
-        url = add_fields("conversations/{}.json".format(conversation_id), fields)
+        url = add_fields("conversations/{}.json".format(conversation_id),
+                         fields)
         return self.item(url, "Conversation", 200)
 
     def attachment_data(self, attachment_id):
@@ -72,12 +82,14 @@ class Client(object):
         return self.page(url, "User", 200, **kwargs)
 
     def call_server(self, url, expected_code, **params):
-        headers = {'Content-Type': 'application-json',
-                   'Accept' : 'application-json',
-                   'Accept-Encoding' : 'gzip, deflate'
-                  }
+        headers = {
+            'Content-Type': 'application-json',
+            'Accept': 'application-json',
+            'Accept-Encoding': 'gzip, deflate'
+        }
         req = requests.get('{}{}'.format(self.base_url, url),
-                           headers=headers, auth=(self.api_key, 'x'), params=params)
+                           headers=headers, auth=(self.api_key, 'x'),
+                           params=params)
         check_status_code(req.status_code, expected_code)
         return req.text
 
@@ -90,7 +102,8 @@ class Client(object):
         caller = inspect.stack()[1][3]
         if kwargs.get('page') is None:
             if caller in self.pagestate:
-                (pcur, pmax) = [self.pagestate[caller].get(x) for x in ['page', 'pages']]
+                (pcur, pmax) = [self.pagestate[caller].get(x) for x in
+                                ['page', 'pages']]
                 if all((pcur, pmax)) and pcur < pmax:
                     kwargs['page'] = pcur + 1
                 elif pcur == pmax:
@@ -109,7 +122,8 @@ class Client(object):
         return page
 
     def clearstate(self, function=None):
-        '''Clear the function state tracking, optionally taking a specific function to clear
+        '''Clear the function state tracking, optionally taking a specific
+            function to clear
            Usage:
              client.reset()
              client.reset('users_for_mailbox')
@@ -120,6 +134,7 @@ class Client(object):
         else:
             self.pagestate = {}
         return True
+
 
 def check_status_code(code, expected):
     status_codes = {
@@ -137,16 +152,18 @@ def check_status_code(code, expected):
         return
     default_status = "Invalid API Key"
     status = status_codes[str(code)]
-    if status != None:
+    if status is not None:
         raise ApiException(status)
     else:
         raise ApiException(default_status)
 
+
 def add_fields(url, fields):
     final_str = url
-    if fields != None and len(fields) > 0:
+    if fields is not None and len(fields) > 0:
         final_str = "{}?fields={}".format(url, ','.join(fields))
     return final_str
+
 
 def parse(json_obj, cls):
     obj = getattr(models, cls)()
@@ -154,10 +171,12 @@ def parse(json_obj, cls):
         setattr(obj, key.lower(), value)
     return obj
 
+
 def parse_list(lst, cls):
     for i in range(len(lst)):
         lst[i] = parse(lst[i], cls)
     return lst
+
 
 class Page:
     def __init__(self):
@@ -165,10 +184,15 @@ class Page:
         self.pages = None
         self.count = None
         self.items = None
+
     def __getitem__(self, index):
         return self.items[index]
 
-    
+    def __len__(self):
+        # number of items in current page
+        return len(self.items)
+
+
 class ApiException(Exception):
     def __init__(self, message):
         Exception.__init__(self, message)

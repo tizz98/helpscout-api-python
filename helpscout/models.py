@@ -11,6 +11,7 @@ class Attachment:
     def isimage(self):
         return self.mimetype is not None and self.mimetype.startwith('image')
 
+
 class Conversation:
     def __init__(self):
         self.id = None
@@ -35,7 +36,8 @@ class Conversation:
         self.tags = None
 
     def iscreatedbycustomer(self):
-        return self.createdby is not None and isinstance(self.createdby, CustomerRef)
+        return self.createdby is not None and isinstance(self.createdby,
+                                                         CustomerRef)
 
     def hascclist(self):
         return self.cclist is not None and len(self.cclist) > 0
@@ -45,6 +47,7 @@ class Conversation:
 
     def hastags(self):
         return self.tags is not None and len(self.tags) > 0
+
 
 class Customer:
     def __init__(self):
@@ -89,6 +92,7 @@ class Customer:
     def haswebsites(self):
         return self.websites is not None and len(self.websites) > 0
 
+
 class Folder:
     def __init__(self):
         self.id = None
@@ -131,7 +135,6 @@ class User:
         self.modifiedat = None
 
 
-
 class Address:
     def __init__(self):
         self.id = None
@@ -170,6 +173,7 @@ class PhoneEntry(CustomerEntry):
 class SocialProfileEntry(CustomerEntry):
     def __init__(self):
         super(SocialProfileEntry, self).__init__()
+
 
 class WebsiteEntry(CustomerEntry):
     def __init__(self):
@@ -211,7 +215,7 @@ class AbstractThread:
         self.attachments = None
 
     def ispublished(self):
-        return self.state == "published" ##hmmm these are not right
+        return self.state == "published"  # hmmm these are not right
 
     def isdraft(self):
         return self.state == "draft"
@@ -227,16 +231,17 @@ class ForwardChild(AbstractRef):
     def __init__(self):
         super(ForwardChild, self).__init__()
 
+
 class Note(AbstractRef):
     def __init__(self):
         super(Note, self).__init__()
+
 
 class Message(AbstractRef):
     def __init__(self):
         super(Message, self).__init__()
 
+
 class ForwardParent(AbstractRef):
     def __init__(self):
         super(ForwardParent, self).__init__()
-
-
