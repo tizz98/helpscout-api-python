@@ -18,6 +18,10 @@ class Client(object):
         url = add_fields("mailboxes.json", fields)
         return self.page(url, "Mailbox", 200, **kwargs)
 
+    def tags(self, fields=None, **kwargs):
+        url = add_fields("tags.json", fields)
+        return self.page(url, "Tag", 200, **kwargs)
+
     def folders(self, mailbox_id, fields=None, **kwargs):
         url = add_fields("mailboxes/{}/folders.json".format(mailbox_id),
                          fields)

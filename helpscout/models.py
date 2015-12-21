@@ -49,6 +49,21 @@ class Conversation:
         return self.tags is not None and len(self.tags) > 0
 
 
+class Tag:
+    def __init__(self):
+        self.id = None
+        self.slug = None
+        self.tag = None
+        self.count = None
+        self.color = None
+        self.createdat = None
+        self.modifiedat = None
+
+    @property
+    def name(self):
+        return self.tag
+
+
 class Customer:
     def __init__(self):
         self.id = None
