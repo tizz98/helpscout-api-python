@@ -1,5 +1,6 @@
 import client
 
+
 class Attachment:
     def __init__(self):
         self.id = None
@@ -12,6 +13,7 @@ class Attachment:
 
     def isimage(self):
         return self.mimetype is not None and self.mimetype.startwith('image')
+
 
 class Conversation(object):
     def __init__(self):
@@ -50,6 +52,18 @@ class Conversation(object):
     def hastags(self):
         return self.tags is not None and len(self.tags) > 0
 
+    def hasthreads(self):
+        return self._threads is not None and len(self._threads) > 0
+
+    @property
+    def threads(self):
+        """threads"""
+        return self._threads
+
+    @threads.setter
+    def threads(self, value):
+        self._threads = client.parse_list(value, "Thread")
+
 
 class Tag:
     def __init__(self):
@@ -64,18 +78,6 @@ class Tag:
     @property
     def name(self):
         return self.tag
-
-    def hasthreads(self):
-        return self._threads is not None and len(self._threads) > 0
-
-    @property
-    def threads(self):
-        """threads"""
-        return self._threads
-
-    @threads.setter
-    def threads(self, value):
-        self._threads = client.parse_list(value, "Thread")
 
 
 class Customer:
