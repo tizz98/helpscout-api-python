@@ -126,12 +126,13 @@ class Client(object):
         return page
 
     def clearstate(self, function=None):
-        '''Clear the function state tracking, optionally taking a specific
-            function to clear
+        """
+           Clear the function state tracking, optionally taking a specific
+             function to clear
            Usage:
              client.reset()
              client.reset('users_for_mailbox')
-        '''
+        """
         if function:
             if self.pagestate.pop(function, None) is None:
                 return False
@@ -182,7 +183,7 @@ def parse_list(lst, cls):
     return lst
 
 
-class Page:
+class Page(object):
     def __init__(self):
         self.page = None
         self.pages = None

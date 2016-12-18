@@ -1,7 +1,7 @@
 import client
 
 
-class Attachment:
+class Attachment(object):
     def __init__(self):
         self.id = None
         self.mimetype = None
@@ -38,6 +38,7 @@ class Conversation(object):
         self.bcclist = None
         self.tags = None
         self._threads = None
+        self._custom_fields = None
 
     def iscreatedbycustomer(self):
         return self.createdby is not None and isinstance(self.createdby,
@@ -57,15 +58,22 @@ class Conversation(object):
 
     @property
     def threads(self):
-        """threads"""
         return self._threads
 
     @threads.setter
     def threads(self, value):
         self._threads = client.parse_list(value, "Thread")
 
+    @property
+    def customfields(self):
+        return self._custom_fields
 
-class Tag:
+    @customfields.setter
+    def customfields(self, value):
+        self._custom_fields = client.parse_list(value, "Field")
+
+
+class Tag(object):
     def __init__(self):
         self.id = None
         self.slug = None
@@ -80,7 +88,7 @@ class Tag:
         return self.tag
 
 
-class Customer:
+class Customer(object):
     def __init__(self):
         self.id = None
         self.firstname = None
@@ -124,7 +132,7 @@ class Customer:
         return self.websites is not None and len(self.websites) > 0
 
 
-class Folder:
+class Folder(object):
     def __init__(self):
         self.id = None
         self.name = None
@@ -135,7 +143,7 @@ class Folder:
         self.modifiedat = None
 
 
-class Mailbox:
+class Mailbox(object):
     def __init__(self):
         self.id = None
         self.name = None
@@ -143,9 +151,18 @@ class Mailbox:
         self.email = None
         self.createdat = None
         self.modifiedat = None
+        self._custom_fields = None
+
+    @property
+    def customfields(self):
+        return self._custom_fields
+
+    @customfields.setter
+    def customfields(self, value):
+        self._custom_fields = client.parse_list(value, "Field")
 
 
-class Source:
+class Source(object):
     def __init__(self):
         self.type = None
         self.via = None
@@ -154,7 +171,7 @@ class Source:
         return self.via is not None and "customer" == self.via
 
 
-class User:
+class User(object):
     def __init__(self):
         self.id = None
         self.firstname = None
@@ -166,7 +183,7 @@ class User:
         self.modifiedat = None
 
 
-class Address:
+class Address(object):
     def __init__(self):
         self.id = None
         self.lines = None
@@ -178,7 +195,7 @@ class Address:
         self.modifiedat = None
 
 
-class CustomerEntry:
+class CustomerEntry(object):
     def __init__(self):
         self.id = None
         self.value = None
@@ -211,13 +228,13 @@ class WebsiteEntry(CustomerEntry):
         super(WebsiteEntry, self).__init__()
 
 
-class MailboxRef:
+class MailboxRef(object):
     def __init__(self):
         self.id = None
         self.name = None
 
 
-class AbstractRef:
+class AbstractRef(object):
     def __init__(self):
         self.id = None
         self.firstname = None
@@ -226,13 +243,11 @@ class AbstractRef:
 
 
 class UserRef(AbstractRef):
-    def __init__(self):
-        super(UserRef, self).__init__()
+    pass
 
 
 class CustomerRef(AbstractRef):
-    def __init__(self):
-        super(CustomerRef, self).__init__()
+    pass
 
 
 class Thread(object):
@@ -258,21 +273,41 @@ class Thread(object):
         return self.attachments is not None and len(self.attachments) > 0
 
 
-class ForwardChild(AbstractRef):
+class FieldOption(object):
     def __init__(self):
-        super(ForwardChild, self).__init__()
+        self.id = None
+        self.label = None
+        self.order = None
+
+
+class Field(object):
+    def __init__(self):
+        self.fieldid = None
+        self.name = None
+        self.value = None
+        self.type = None
+        self._options = None
+
+    @property
+    def options(self):
+        return self._options
+
+    @options.setter
+    def options(self, value):
+        self._options = client.parse_list(value, 'FieldOption')
+
+
+class ForwardChild(AbstractRef):
+    pass
 
 
 class Note(AbstractRef):
-    def __init__(self):
-        super(Note, self).__init__()
+    pass
 
 
 class Message(AbstractRef):
-    def __init__(self):
-        super(Message, self).__init__()
+    pass
 
 
 class ForwardParent(AbstractRef):
-    def __init__(self):
-        super(ForwardParent, self).__init__()
+    pass
